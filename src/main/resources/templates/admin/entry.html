@@ -1,0 +1,143 @@
+
+	<div th:fragment="content" class="content row small-collapse medium-uncollapse">
+		<input type="checkbox" name="toggle" id="toggle" class="toggle-nav hide" />
+		<label class="toggle-icon hide-for-large" for="toggle"><i class="fa fa-bars" aria-hidden="true"></i></label>
+
+		<div th:replace="includes/nav :: nav"></div>
+		
+		<div class="main column">
+			<div th:unless="${formAction == 'edit' and entry == null}">
+				<h2 th:text="|${formAction == 'edit'? 'Update' : 'Add'} entry|"></h2>
+				<div class="callout success success-msg" th:if="${msg} != null">
+					<p th:inline="text">
+						<i class="fa fa-check-circle"></i>
+						[[${msg}]]
+					</p>
+					<button class="close-button" aria-label="Dismiss alert" type="button" data-close="data-close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>			
+				<form action="#" method="post" th:action="@{~/admin/{action}(action=${formAction})}" 
+				th:object="${entry}" class="entry-form" enctype="multipart/form-data">
+					<input type="hidden" id="entryId" th:value="${entry.id}" />
+					<div>
+						<label for="year">
+							Year: <span class="required">*</span> 
+							<span id="year-val">1930</span>
+						</label>
+						<input type="range" name="year" id="year" min="1930" max="2030" step="4" 
+						required="required" th:field="*{year}" />
+					</div>
+					<div>
+						<label for="summary">Summary: <span class="required">*</span></label>
+						<textarea name="summary" id="summary" required="required" th:field="*{summary}"></textarea>
+					</div>
+					<div>
+						<label for="recap">Tournament recap (Optional):</label>
+						<textarea name="recap" id="recap" th:field="*{tournamentRecap}"></textarea>
+					</div>
+					<div class="show-optional">
+						<span>Pictures</span>
+						<div class="switch small">
+	  						<input class="switch-input" id="togglePics" type="checkbox" name="togglePics"
+	  						th:checked="${!#lists.isEmpty(entry.pictures)}" />
+	  						<label class="switch-paddle" for="togglePics">
+	  							<span class="show-for-sr">Upload pictures</span>
+	  						</label>
+						</div>
+					</div>
+					<div class="optional-input picture-upload" th:classappend="${#lists.isEmpty(entry.pictures)} ? 'hide' : ''">
+						<label for="photos" class="button small warning">
+							<i class="fa fa-upload" aria-hidden="true"></i>
+							Browse
+						</label>
+						<input type="file" name="photos" id="photos" class="show-for-sr" multiple="multiple" />
+						<span class="selected-files"></span>
+						<div class="entry-pics" th:if="${!#lists.isEmpty(entry.pictures)}">
+							<h5>Entry pics</h5>
+							<div class="pic" th:each="pic, iterStat : ${entry.pictures}" th:attr="data-pic-id=${pic.id}">
+								<img th:src="@{~/{picUrl}(picUrl=${pic.url})}" th:alt="|Picture ${iterStat.count}|" />
+								<button class="close-button" aria-label="Remove pic" type="button" data-close="data-close">
+									<span aria-hidden="true">&times;</span>
+								</button>		
+							</div>
+						</div>
+					</div>	
+					<div class="show-optional">
+						<span>Stats</span>
+						<div class="switch small">
+	  						<input class="switch-input" id="toggleStats" type="checkbox" name="toggleStats"
+	  						th:checked="${!#lists.isEmpty(entry.stats)}" />
+	  						<label class="switch-paddle" for="toggleStats">
+	  							<span class="show-for-sr">Add stats</span>
+	  						</label>
+						</div>
+					</div>
+					<div class="optional-input statistics" th:classappend="${#lists.isEmpty(entry.stats)} ? 'hide' : ''">
+						<label>Stat options
+	  						<select name="eventStats" id="eventStats">
+	    						<option value=""></option>
+	    						<option th:each="stat : ${stats}"
+	    						th:disabled="${#lists.contains(entry.statIds, stat.id)}"
+	    						th:value="${stat.id}" th:text="${stat.name}"></option>
+	  						</select>
+						</label>
+						<div class="entry-stats" th:if="${!#lists.isEmpty(entry.stats)}">
+							<h5>Entry stats</h5>
+							<table class="hover">
+								<tr th:each="entryStat : ${entry.stats}" th:attr="data-stat-id=${entryStat.id}">
+									<td th:text="${entryStat.stat.name}"></td>
+									<td th:inline="text">
+										[[${entryStat.value}]]
+										<button class="close-button" aria-label="Remove stat" type="button" data-close="data-close">
+											<span aria-hidden="true">&times;</span>
+										</button>																		
+									</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+					<div class="show-optional">
+						<span>Facts</span>
+						<div class="switch small">
+	  						<input class="switch-input" id="toggleFacts" type="checkbox" name="toggleFacts"
+	  						th:checked="${!#lists.isEmpty(entry.facts)}" />
+	  						<label class="switch-paddle" for="toggleFacts">
+	  							<span class="show-for-sr">Add facts</span>
+	  						</label>
+						</div>
+					</div>
+					<div class="optional-input facts" th:classappend="${#lists.isEmpty(entry.facts)}? 'hide' : ''">
+						<div class="fact" th:if="${#lists.isEmpty(entry.facts)}">
+							<label>Fact 1</label>
+							<input type="text" name="facts" />
+						</div>
+						<div class="entry-facts" th:if="${!#lists.isEmpty(entry.facts)}">
+							<h5>Entry facts</h5>
+							<table class="hover">
+								<tr th:each="fact : ${entry.facts}">
+									<td th:inline="text" th:attr="data-fact-id=${fact.id}">
+										[[${fact.desc}]]
+										<button class="close-button" aria-label="Remove fact" type="button" data-close="data-close">
+											<span aria-hidden="true">&times;</span>
+										</button>
+									</td>
+								</tr>
+							</table>
+						</div>
+						<a href="#" class="add-fact">Add new</a>
+					</div>
+					<button class="button primary expanded" type="submit" th:inline="text">
+						<i class="fa fa-floppy-o" aria-hidden="true"></i>
+						[[${formAction == 'edit' ? 'Save changes' : 'Add'}]]
+					</button>
+				</form>				
+			</div>
+			<div th:if="${error} != null" class="callout alert">
+				<p class="error" th:inline="text">
+					<i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+					[[${error}]]
+				</p>
+			</div>
+		</div>
+	</div>

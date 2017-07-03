@@ -1,0 +1,66 @@
+
+	<div th:fragment="content" class="content row align-center">
+		<div class="intro column">
+			<h1>FIFA World Cup Timeline</h1>
+			<h4>Welcome to the official* World Cup timeline!</h4>
+			<p>
+				The timeline provides an extensive look into the past, present and future of the competition. 
+				Embark on a journey through the glorious history of this wonderful event.
+			</p>
+		</div>
+		<div class="timeline column">
+			<div class="arrows">
+				<div class="arrow arrow-left"><i class="fa fa-chevron-left"></i></div>
+				<div class="arrow arrow-right"><i class="fa fa-chevron-right"></i></div>
+			</div>
+			<div class="bar-container">
+				<div class="progress-bar">
+					<div class="entries">
+						<div class="event" th:each="entry : ${entries}">
+							<a th:href="@{~/entries/{entryId}(entryId=${entry.id})}">
+								<h4 class="year" th:text="${entry.year}"></h4>
+							</a>
+						</div>								
+					</div>				
+					<div class="success progress">
+						<div class="progress-meter-container">
+							<div class="progress-meter"></div>
+						</div>
+					</div>				
+				</div>			
+			</div>
+			<div class="chosen-entry column row align-center">
+				<div class="column small-12 large-4">
+					<div class="thumbnail">
+						<img th:src="@{~/uploads/default.jpg}" alt="FIFA World Cup" />
+					</div>					
+				</div>
+				<div class="column small-12 large-4">
+					<h3 class="year"></h3>
+					<p class="summary"></p>
+					<a href="#" id="readMore" class="hide">Read more</a>
+				</div>
+				<div class="column more-info small-12 large-8 hide">
+					<div class="recap hide">
+						<h4>Tournament recap</h4>
+						<p></p>
+					</div>
+					<div class="more-pics hide">
+						<h4>Pictures</h4>
+						<div class="event-pic-container column row"></div>
+					</div>
+					<div class="stats hide">
+						<h4>Stats</h4>
+						<table class="hover"></table>				
+					</div>
+					<div class="facts hide">
+						<h4>Facts</h4>
+						<table class="hover"></table>						
+					</div>
+				</div>				
+			</div>
+		</div>
+		<div class="notice column">
+			<small>* not really an official timeline</small>
+		</div>
+	</div>

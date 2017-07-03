@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato|Montserrat:400,700" /> 
+	<link rel="stylesheet" th:href="@{~/css/app.min.css}" />
+	<title th:text="'FIFA World Cup Timeline | ' + ${title}"></title>
+</head>
+<body>
+	<div class="wrapper">
+		<div th:replace="${template} :: content"></div>
+		
+		<footer class="row">
+			<p th:text="'Aleksandar Salov &copy; ' + ${#dates.format(#dates.createNow(), 'YYYY')}" class="column"></p>
+		</footer>
+	</div>
+	<div class="back-to-top-btn hide"><i class="fa fa-chevron-up"></i></div>
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+	<script th:src="@{~/js/app.min.js}"></script>
+</body>
+</html>

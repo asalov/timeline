@@ -1,0 +1,28 @@
+
+	<div th:fragment="content" class="content row align-center">
+		<div class="column login-form align-self-middle">
+			<h2>Timeline Admin</h2>
+			<form method="post" action="#" th:action="@{~/admin/login}" th:object="${user}">
+				<div class="column row">
+					<label for="username">Username: <span class="required">*</span></label>
+					<input type="text" name="username" id="username" th:field="*{username}" autofocus="autofocus" />				
+				</div>
+				<div class="column row">
+					<label for="password">Password: <span class="required">*</span></label>
+					<input type="password" name="password" id="password" />		
+				</div>
+				<div class="column row">
+					<button class="button primary expanded" type="submit">
+						<i class="fa fa-sign-in" aria-hidden="true"></i>
+						Login
+					</button>
+				</div>
+				<div th:if="${error} != null" class="column row callout alert">
+					<p class="error" th:inline="text">
+						<i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+						[[${error}]]
+					</p>
+				</div>				
+			</form>
+		</div>
+	</div>

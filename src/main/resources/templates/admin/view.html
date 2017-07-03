@@ -1,0 +1,94 @@
+
+	<div th:fragment="content" class="content row small-collapse medium-uncollapse">
+		<input type="checkbox" name="toggle" id="toggle" class="toggle-nav hide" />
+		<label class="toggle-icon hide-for-large" for="toggle"><i class="fa fa-bars" aria-hidden="true"></i></label>
+		
+		<div th:replace="includes/nav :: nav"></div>
+		
+		<div class="main column">
+			<div class="entry" th:if="${entry} != null">
+				<h2 th:text="|${entry.year} FIFA World Cup|"></h2>
+				<div class="column row">
+					<div class="column small-12 medium-6">
+						<div class="thumbnail">
+							<img th:src="@{~/{picUrl}(picUrl=${!#lists.isEmpty(entry.pictures) 
+							? entry.pictures[0].url : 'uploads/default.jpg'})}" th:alt="|${entry.year} World Cup|" />			
+						</div>
+					</div>
+					<div class="column small-12 medium-6">
+						<div th:text="${entry.summary}" class="summary"></div>
+					</div>					
+				</div>
+				<div class="more-info">
+					<div class="recap" th:if="${entry.tournamentRecap != null}">
+						<h4>Tournament recap</h4>
+						<p th:text="${entry.tournamentRecap}"></p>
+					</div>
+					<div class="more-pics" th:if="${#lists.size(entry.pictures) > 1}">
+						<h4>Pictures</h4>
+						<div class="event-pic-container column row">
+							<div class="event-pic column small-12 medium-6 large-4"
+							th:each="pic, iterStat : ${entry.pictures}" th:if="${iterStat.index != 0}"
+							th:style="|background-image:url('@{~/{picUrl}(picUrl=${pic.url})}'|">
+							</div>						
+						</div>
+					</div>
+					<div class="stats" th:if="${!#lists.isEmpty(entry.stats)}">
+						<h4>Stats</h4>
+						<table class="hover">
+							<tr th:each="entryStat : ${entry.stats}">
+								<td th:text="${entryStat.stat.name}"></td>
+								<td th:text="${entryStat.value}"></td>
+							</tr>
+						</table>				
+					</div>
+					<div class="facts" th:if="${!#lists.isEmpty(entry.facts)}">
+						<h4>Facts</h4>
+						<table class="hover">
+							<tr th:each="fact : ${entry.facts}">
+								<td th:text="${fact.desc}"></td>
+							</tr>
+						</table>						
+					</div>
+				</div>
+				<div class="actions">
+					<a id="editEntry" th:href="@{~/admin/edit/{entryId}(entryId=${entry.id})}" class="button warning expanded">
+						<i class="fa fa-edit" aria-hidden="true"></i>
+						Edit
+					</a>
+					<form id="deleteEntry" method="delete" action="#" th:action="@{/entries/{entryId}(entryId=${entry.id})}">
+						<button class="button alert expanded" type="submit">
+							<i class="fa fa-trash-o" aria-hidden="true"></i>
+							Delete	
+						</button>
+					</form>
+				</div>
+			</div>
+			<div th:if="${error} != null" class="callout alert">
+				<p class="error" th:inline="text">
+					<i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+					[[${error}]]
+				</p>
+			</div>
+		</div>
+		<div class="reveal dialog" id="deleteConfirmation" data-reveal="data-reveal">
+	  		<h4>Are you sure you want to delete this entry?</h4>
+	  		<div class="row align-center align-spaced">
+	  			<div class="column small-12 large-5">
+	  				<button id="confirmDelete" class="button success large">
+	  					<i class="fa fa-check-circle" aria-hidden="true"></i>
+	  					Yes
+	  				</button>	
+	  			</div>
+	  			<div class="column small-12 large-5">
+	  				<button id="cancelDelete" class="button alert large">
+						<i class="fa fa-ban" aria-hidden="true"></i>
+	  					No
+	  				</button>
+	  			</div>
+	  		</div>
+	  		<button class="close-button" data-close="data-close" aria-label="Close modal" type="button">
+	    		<span aria-hidden="true">&times;</span>
+	  		</button>
+		</div>		
+	</div>

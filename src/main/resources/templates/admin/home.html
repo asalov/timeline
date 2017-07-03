@@ -1,0 +1,66 @@
+
+	<div th:fragment="content" class="content row small-collapse medium-uncollapse">
+		<input type="checkbox" name="toggle" id="toggle" class="toggle-nav hide" />
+		<label class="toggle-icon hide-for-large" for="toggle"><i class="fa fa-bars" aria-hidden="true"></i></label>
+		
+		<div th:replace="includes/nav :: nav"></div>
+		
+		<div class="main column">
+			<h2>Timeline entries</h2>
+			<div class="callout success success-msg" th:if="${msg} != null">
+				<p th:inline="text">
+					<i class="fa fa-check-circle"></i>
+					[[${msg}]]
+				</p>
+				<button class="close-button" aria-label="Dismiss alert" type="button" data-close="data-close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<span>Sort/Filter</span>
+			<div class="switch small">
+				<input class="switch-input" id="toggleUtility" type="checkbox" name="toggleUtility" />
+				<label class="switch-paddle" for="toggleUtility">
+					<span class="show-for-sr">Show utilities</span>
+				</label>
+			</div>	
+			<div class="optional-input util">
+				<label for="sortEntries">Sort</label>
+				<select id="sortEntries">
+					<option value="year-asc">Year - ascending</option>
+					<option value="year-desc">Year - descending</option>
+					<option value="creation-asc">Creation date - ascending</option>
+					<option value="creation-desc">Creation date - descending</option>
+					<option value="last-modified">Last modified</option>
+				</select>
+				<label>Filter from <span id="year-min-val">1930</span> to <span id="year-max-val">2030</span></label>
+				<div id="filterSlider" class="slider" data-slider="">
+		  			<span class="slider-handle" data-slider-handle="" role="slider" tabindex="1"></span>
+		  			<span class="slider-fill" data-slider-fill=""></span>
+		  			<span class="slider-handle" data-slider-handle="" role="slider" tabindex="1"></span>
+		  			<input type="hidden" id="year-min" />
+		  			<input type="hidden" id="year-max" />
+				</div>
+			</div>
+			<div class="entries row" th:if="${entries} != null">
+				<div class="entry column small-12 medium-6 large-4" th:each="entry : ${entries}">
+					<a th:href="@{~/admin/view/{entryId}(entryId=${entry.id})}">
+						<div class="card">
+							<div class="card-section image-section" 
+							th:style="|background-image:url('@{~/{picUrl}(picUrl=${!#lists.isEmpty(entry.pictures) 
+							? entry.pictures[0].url : 'uploads/default.jpg'})}')|"></div>
+							<div class="card-section">
+								<h3 class="year" th:text="|${entry.year} World Cup|"></h3>
+								<p th:text="${#strings.abbreviate(entry.summary, 75)}"></p>		
+							</div>
+							<input type="hidden" class="creation-date" th:value="${entry.createdAt}" />
+							<input type="hidden" class="last-modified" th:value="${entry.lastModified}"/>
+						</div>
+					</a>
+				</div>
+				<div class="no-results hide">No entries match these criteria.</div>
+			</div>
+			<div th:if="${entries} == null" class="callout secondary">
+				<p>No entries added yet.</p>			
+			</div>
+		</div>
+	</div>

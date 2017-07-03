@@ -1,0 +1,15 @@
+
+	<div th:fragment="nav" class="navigation column small-12 large-2">
+		<nav>
+			<ul class="menu vertical">
+				<li><a th:href="@{~/admin}"><i class="fa fa-home" aria-hidden="true"></i>Home</a></li>
+				<li><a th:href="@{~/admin/add}"><i class="fa fa-clone" aria-hidden="true"></i>Add</a></li>
+				<li>
+					<form method="post" action="#" th:action="@{~/admin/logout}">
+						<i class="fa fa-sign-out" aria-hidden="true"></i>
+						<input type="submit" value="Logout" />
+					</form>	
+				</li>
+			</ul>			
+		</nav>
+	</div>
